@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=384,height=256,initial-scale=1">
+
+<title>Clima Marialva</title>
+
+
+<style>
+
+/* =====================================================
+   CONFIGURAÇÃO GERAL
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+
+    margin: 0;
+    padding: 0;
+
+    width: 384px;
+    height: 256px;
+
+    overflow: hidden;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #F5F7F9;
+
+    color: #142536;
+}
+
+
+/* =====================================================
+   PAINEL
+===================================================== */
+
+#app {
+
+    width: 384px;
+    height: 256px;
+
+    overflow: hidden;
+
+    background: #F5F7F9;
+
+    position: relative;
+}
+
+
+/* =====================================================
+   CABEÇALHO
+===================================================== */
+
+.header {
+
+    height: 45px;
+
+    background: #123B5D;
+
+    color: #FFFFFF;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 12px;
+}
+
+
+.city {
+
+    font-size: 21px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.5px;
+
+    white-space: nowrap;
+}
+
+
+.clock {
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    text-align: right;
+
+    line-height: 17px;
+}
+
+
+/* =====================================================
+   CLIMA ATUAL
+===================================================== */
+
+.current {
+
+    height: 106px;
+
+    background: #FFFFFF;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    position: relative;
+}
+
+
+/* ÍCONE */
+
+.current-icon {
+
+    width: 105px;
+
+    font-size: 68px;
+
+    line-height: 1;
+
+    text-align: center;
+}
+
+
+/* TEMPERATURA */
+
+.current-temperature {
+
+    width: 150px;
+
+    text-align: left;
+}
+
+
+.temperature {
+
+    font-size: 58px;
+
+    line-height: 55px;
+
+    font-weight: 900;
+
+    letter-spacing: -3px;
+
+    color: #123B5D;
+}
+
+
+/* MÁXIMA / MÍNIMA */
+
+.minmax {
+
+    font-size: 19px;
+
+    line-height: 23px;
+
+    font-weight: 800;
+
+    color: #526574;
+
+    margin-left: 3px;
+}
+
+
+/* =====================================================
+   PREVISÃO
+===================================================== */
+
+.forecast {
+
+    height: 105px;
+
+    background: #E9EFF4;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    padding: 8px 4px 5px;
+}
+
+
+.day {
+
+    text-align: center;
+
+    border-right:
+        1px solid #CCD7E0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+
+.day:last-child {
+
+    border-right: none;
+}
+
+
+/* NOME DO DIA */
+
+.day-name {
+
+    font-size: 13px;
+
+    font-weight: 900;
+
+    color: #274C67;
+
+    height: 18px;
+}
+
+
+/* ÍCONE */
+
+.day-icon {
+
+    font-size: 31px;
+
+    line-height: 34px;
+
+    height: 36px;
+}
+
+
+/* MÁXIMA / MÍNIMA */
+
+.day-temperature {
+
+    font-size: 15px;
+
+    font-weight: 900;
+
+    color: #172B3B;
+
+    white-space: nowrap;
+}
+
+
+/* CHUVA */
+
+.day-rain {
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    color: #2473A6;
+
+    height: 17px;
+}
+
+
+/* =====================================================
+   ESTADO DE ERRO
+===================================================== */
+
+#error {
+
+    display: none;
+
+    position: absolute;
+
+    left: 6px;
+
+    bottom: 3px;
+
+    font-size: 7px;
+
+    color: #B43D32;
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div id="app">
+
+
+    <!-- ================================================
+         CABEÇALHO
+    ================================================= -->
+
+    <div class="header">
+
+
+        <div class="city">
+
+            MARIALVA • PR
+
+        </div>
+
+
+        <div class="clock"
+             id="clock">
+
+            --:--
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ================================================
+         CLIMA ATUAL
+    ================================================= -->
+
+    <div class="current">
+
+
+        <div class="current-icon"
+             id="currentIcon">
+
+            ☀️
+
+        </div>
+
+
+        <div class="current-temperature">
+
+
+            <div class="temperature"
+                 id="temperature">
+
+                --°
+
+            </div>
+
+
+            <div class="minmax"
+                 id="minmax">
+
+                --° / --°
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ================================================
+         PREVISÃO
+    ================================================= -->
+
+    <div class="forecast"
+         id="forecast">
+
+    </div>
+
+
+    <div id="error">
+
+        Sem conexão
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+   OPEN-METEO
+===================================================== */
+
+const API =
+
+"https://api.open-meteo.com/v1/forecast" +
+
+"?latitude=-23.485" +
+
+"&longitude=-51.792" +
+
+"&current=" +
+
+"temperature_2m," +
+
+"apparent_temperature," +
+
+"relative_humidity_2m," +
+
+"weather_code," +
+
+"wind_speed_10m" +
+
+"&daily=" +
+
+"weather_code," +
+
+"temperature_2m_max," +
+
+"temperature_2m_min," +
+
+"precipitation_probability_max" +
+
+"&timezone=America%2FSao_Paulo" +
+
+"&forecast_days=5";
+
+
+
+/* =====================================================
+   CONDIÇÕES METEOROLÓGICAS
+===================================================== */
+
+const weather = {
+
+
+    0: ["☀️", "CÉU LIMPO"],
+
+    1: ["🌤️", "LIMPO"],
+
+    2: ["⛅", "PARCIALMENTE NUBLADO"],
+
+    3: ["☁️", "NUBLADO"],
+
+
+    45: ["🌫️", "NEBLINA"],
+
+    48: ["🌫️", "NEBLINA"],
+
+
+    51: ["🌦️", "GAROA"],
+
+    53: ["🌦️", "GAROA"],
+
+    55: ["🌧️", "GAROA"],
+
+
+    61: ["🌧️", "CHUVA"],
+
+    63: ["🌧️", "CHUVA"],
+
+    65: ["🌧️", "CHUVA"],
+
+
+    66: ["🌧️", "CHUVA"],
+
+    67: ["🌧️", "CHUVA"],
+
+
+    71: ["❄️", "NEVE"],
+
+    73: ["❄️", "NEVE"],
+
+    75: ["❄️", "NEVE"],
+
+    77: ["❄️", "NEVE"],
+
+
+    80: ["🌦️", "PANCADAS"],
+
+    81: ["🌧️", "PANCADAS"],
+
+    82: ["⛈️", "PANCADAS"],
+
+
+    85: ["❄️", "NEVE"],
+
+    86: ["❄️", "NEVE"],
+
+
+    95: ["⛈️", "TROVOADA"],
+
+    96: ["⛈️", "TROVOADA"],
+
+    99: ["⛈️", "TROVOADA"]
+
+};
+
+
+
+function weatherInfo(code) {
+
+    return weather[code]
+        || ["🌤️", "VARIÁVEL"];
+
+}
+
+
+
+/* =====================================================
+   NOME DOS DIAS
+===================================================== */
+
+function getDayName(
+    dateString,
+    index
+) {
+
+
+    if (index === 0) {
+
+        return "HOJE";
+
+    }
+
+
+    if (index === 1) {
+
+        return "AMANHÃ";
+
+    }
+
+
+    return new Date(
+        dateString + "T12:00:00"
+    )
+
+    .toLocaleDateString(
+        "pt-BR",
+        {
+            weekday: "short"
+        }
+    )
+
+    .replace(".", "")
+
+    .toUpperCase();
+
+}
+
+
+
+/* =====================================================
+   RELÓGIO
+===================================================== */
+
+function updateClock() {
+
+
+    const now = new Date();
+
+
+    const time =
+
+        now.toLocaleTimeString(
+            "pt-BR",
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+
+    const day =
+
+        now.toLocaleDateString(
+            "pt-BR",
+            {
+                day: "2-digit",
+                month: "2-digit"
+            }
+        );
+
+
+    document.getElementById(
+        "clock"
+    ).innerHTML =
+
+        time +
+
+        "<br>" +
+
+        day;
+
+}
+
+
+updateClock();
+
+
+setInterval(
+    updateClock,
+    30000
+);
+
+
+
+/* =====================================================
+   CACHE
+===================================================== */
+
+function saveWeather(data) {
+
+    try {
+
+        localStorage.setItem(
+            "marialva_weather",
+            JSON.stringify(data)
+        );
+
+    }
+
+    catch (e) {}
+
+}
+
+
+
+function loadWeather() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(
+                "marialva_weather"
+            )
+        );
+
+    }
+
+    catch (e) {
+
+        return null;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   MOSTRAR DADOS
+===================================================== */
+
+function render(data) {
+
+
+    const current =
+        data.current;
+
+
+    const daily =
+        data.daily;
+
+
+    const currentInfo =
+        weatherInfo(
+            current.weather_code
+        );
+
+
+    /* ÍCONE ATUAL */
+
+    document.getElementById(
+        "currentIcon"
+    ).textContent =
+        currentInfo[0];
+
+
+
+    /* TEMPERATURA ATUAL */
+
+    document.getElementById(
+        "temperature"
+    ).textContent =
+
+        Math.round(
+            current.temperature_2m
+        ) + "°";
+
+
+
+    /* MÁXIMA / MÍNIMA */
+
+    document.getElementById(
+        "minmax"
+    ).textContent =
+
+        Math.round(
+            daily.temperature_2m_max[0]
+        ) +
+
+        "° / " +
+
+        Math.round(
+            daily.temperature_2m_min[0]
+        ) +
+
+        "°";
+
+
+
+    /* ================================================
+       PREVISÃO
+    ================================================= */
+
+    let html = "";
+
+
+
+    for (
+        let i = 0;
+        i < 4;
+        i++
+    ) {
+
+
+        const info =
+            weatherInfo(
+                daily.weather_code[i]
+            );
+
+
+        const max =
+            Math.round(
+                daily.temperature_2m_max[i]
+            );
+
+
+        const min =
+            Math.round(
+                daily.temperature_2m_min[i]
+            );
+
+
+        const rain =
+            Math.round(
+                daily.precipitation_probability_max[i] || 0
+            );
+
+
+
+        html +=
+
+        `
+
+        <div class="day">
+
+
+            <div class="day-name">
+
+                ${getDayName(
+                    daily.time[i],
+                    i
+                )}
+
+            </div>
+
+
+            <div class="day-icon">
+
+                ${info[0]}
+
+            </div>
+
+
+            <div class="day-temperature">
+
+                ${max}° / ${min}°
+
+            </div>
+
+
+            <div class="day-rain">
+
+                ${rain}%
+
+            </div>
+
+
+        </div>
+
+        `;
+
+    }
+
+
+
+    document.getElementById(
+        "forecast"
+    ).innerHTML = html;
+
+}
+
+
+
+/* =====================================================
+   BUSCAR PREVISÃO
+===================================================== */
+
+async function updateWeather() {
+
+
+    try {
+
+
+        const response =
+
+            await fetch(
+                API +
+                "&_=" +
+                Date.now(),
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "API error"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        render(data);
+
+
+        saveWeather(data);
+
+
+        document.getElementById(
+            "error"
+        ).style.display =
+            "none";
+
+
+    }
+
+    catch (error) {
+
+
+        console.log(
+            "Erro clima:",
+            error
+        );
+
+
+        const cached =
+            loadWeather();
+
+
+        if (cached) {
+
+            render(cached);
+
+        }
+
+
+        document.getElementById(
+            "error"
+        ).style.display =
+            "block";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   INICIALIZAÇÃO
+===================================================== */
+
+updateWeather();
+
+
+
+/*
+    Atualiza a previsão
+    a cada 10 minutos.
+*/
+
+setInterval(
+    updateWeather,
+    10 * 60 * 1000
+);
+
+
+</script>
+
+
+</body>
+
+</html>
