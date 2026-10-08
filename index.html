@@ -6,16 +6,18 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=384,height=256,initial-scale=1">
+      content="width=1536,height=1024,initial-scale=1">
 
-<title>Clima Marialva</title>
+<title>Previsão do Tempo - Marialva</title>
 
 
 <style>
 
-/* =====================================================
+/* =========================================================
    CONFIGURAÇÃO GERAL
-===================================================== */
+   RESOLUÇÃO: 1536 × 1024
+   PROPORÇÃO: 3:2
+========================================================= */
 
 * {
     box-sizing: border-box;
@@ -27,47 +29,54 @@ body {
     margin: 0;
     padding: 0;
 
-    width: 384px;
-    height: 256px;
+    width: 1536px;
+    height: 1024px;
 
     overflow: hidden;
 
-    font-family: Arial, Helvetica, sans-serif;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
     background: #F5F7F9;
 
     color: #142536;
+
 }
 
 
-/* =====================================================
-   PAINEL
-===================================================== */
+/* =========================================================
+   ÁREA PRINCIPAL
+========================================================= */
 
 #app {
 
-    width: 384px;
-    height: 256px;
+    position: relative;
+
+    width: 1536px;
+    height: 1024px;
 
     overflow: hidden;
 
     background: #F5F7F9;
 
-    position: relative;
 }
 
 
-/* =====================================================
+/* =========================================================
    CABEÇALHO
-===================================================== */
+========================================================= */
 
 .header {
 
-    height: 45px;
+    width: 100%;
 
-    background: #123B5D;
+    height: 180px;
 
-    color: #FFFFFF;
+    padding:
+        0
+        48px;
 
     display: flex;
 
@@ -75,43 +84,48 @@ body {
 
     justify-content: space-between;
 
-    padding: 0 12px;
+    background: #123B5D;
+
+    color: #FFFFFF;
+
 }
 
 
 .city {
 
-    font-size: 21px;
+    font-size: 78px;
 
     font-weight: 900;
 
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 
-    white-space: nowrap;
+    line-height: 1;
+
 }
 
 
 .clock {
 
-    font-size: 15px;
+    font-size: 48px;
 
     font-weight: 700;
 
+    line-height: 1.05;
+
     text-align: right;
 
-    line-height: 17px;
 }
 
 
-/* =====================================================
+/* =========================================================
    CLIMA ATUAL
-===================================================== */
+========================================================= */
 
 .current {
 
-    height: 106px;
+    width: 100%;
 
-    background: #FFFFFF;
+    height: 425px;
 
     display: flex;
 
@@ -119,45 +133,55 @@ body {
 
     justify-content: center;
 
-    position: relative;
+    background: #FFFFFF;
+
 }
 
 
-/* ÍCONE */
+/* =========================================================
+   ÍCONE PRINCIPAL
+========================================================= */
 
 .current-icon {
 
-    width: 105px;
+    width: 410px;
 
-    font-size: 68px;
+    font-size: 275px;
 
     line-height: 1;
 
     text-align: center;
+
+}
+
+
+/* =========================================================
+   BLOCO DA TEMPERATURA
+========================================================= */
+
+.current-temperature {
+
+    width: 600px;
+
+    text-align: left;
+
 }
 
 
 /* TEMPERATURA */
 
-.current-temperature {
-
-    width: 150px;
-
-    text-align: left;
-}
-
-
 .temperature {
 
-    font-size: 58px;
+    font-size: 235px;
 
-    line-height: 55px;
+    line-height: 0.85;
 
     font-weight: 900;
 
-    letter-spacing: -3px;
+    letter-spacing: -12px;
 
     color: #123B5D;
+
 }
 
 
@@ -165,43 +189,53 @@ body {
 
 .minmax {
 
-    font-size: 19px;
+    margin-top: 42px;
 
-    line-height: 23px;
+    margin-left: 12px;
+
+    font-size: 72px;
+
+    line-height: 1;
 
     font-weight: 800;
 
     color: #526574;
 
-    margin-left: 3px;
 }
 
 
-/* =====================================================
-   PREVISÃO
-===================================================== */
+/* =========================================================
+   ÁREA DA PREVISÃO
+========================================================= */
 
 .forecast {
 
-    height: 105px;
+    width: 100%;
 
-    background: #E9EFF4;
+    height: 419px;
+
+    padding:
+        28px
+        20px
+        20px;
 
     display: grid;
 
     grid-template-columns:
         repeat(4, 1fr);
 
-    padding: 8px 4px 5px;
+    background: #E9EFF4;
+
 }
 
 
+/* =========================================================
+   CADA DIA
+========================================================= */
+
 .day {
 
-    text-align: center;
-
-    border-right:
-        1px solid #CCD7E0;
+    position: relative;
 
     display: flex;
 
@@ -210,72 +244,106 @@ body {
     align-items: center;
 
     justify-content: space-between;
+
+    padding:
+        5px
+        20px
+        20px;
+
+    border-right:
+        3px solid #CCD7E0;
+
 }
 
 
 .day:last-child {
 
     border-right: none;
+
 }
 
 
-/* NOME DO DIA */
+/* =========================================================
+   NOME DO DIA
+========================================================= */
 
 .day-name {
 
-    font-size: 13px;
+    height: 55px;
+
+    font-size: 45px;
 
     font-weight: 900;
 
     color: #274C67;
 
-    height: 18px;
+    line-height: 1;
+
+    text-align: center;
+
 }
 
 
-/* ÍCONE */
+/* =========================================================
+   ÍCONE DO DIA
+========================================================= */
 
 .day-icon {
 
-    font-size: 31px;
+    height: 125px;
 
-    line-height: 34px;
+    font-size: 105px;
 
-    height: 36px;
+    line-height: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
 }
 
 
-/* MÁXIMA / MÍNIMA */
+/* =========================================================
+   TEMPERATURA DO DIA
+========================================================= */
 
 .day-temperature {
 
-    font-size: 15px;
+    font-size: 52px;
 
     font-weight: 900;
+
+    line-height: 1;
 
     color: #172B3B;
 
     white-space: nowrap;
+
 }
 
 
-/* CHUVA */
+/* =========================================================
+   PROBABILIDADE DE CHUVA
+========================================================= */
 
 .day-rain {
 
-    font-size: 13px;
+    font-size: 43px;
 
     font-weight: 800;
 
+    line-height: 1;
+
     color: #2473A6;
 
-    height: 17px;
 }
 
 
-/* =====================================================
-   ESTADO DE ERRO
-===================================================== */
+/* =========================================================
+   ERRO / OFFLINE
+========================================================= */
 
 #error {
 
@@ -283,13 +351,14 @@ body {
 
     position: absolute;
 
-    left: 6px;
+    bottom: 12px;
 
-    bottom: 3px;
+    left: 20px;
 
-    font-size: 7px;
+    font-size: 18px;
 
     color: #B43D32;
+
 }
 
 
@@ -304,9 +373,9 @@ body {
 <div id="app">
 
 
-    <!-- ================================================
+    <!-- =====================================================
          CABEÇALHO
-    ================================================= -->
+    ====================================================== -->
 
     <div class="header">
 
@@ -318,8 +387,9 @@ body {
         </div>
 
 
-        <div class="clock"
-             id="clock">
+        <div
+            class="clock"
+            id="clock">
 
             --:--
 
@@ -330,34 +400,38 @@ body {
 
 
 
-    <!-- ================================================
+    <!-- =====================================================
          CLIMA ATUAL
-    ================================================= -->
+    ====================================================== -->
 
     <div class="current">
 
 
-        <div class="current-icon"
-             id="currentIcon">
+        <div
+            class="current-icon"
+            id="currentIcon">
 
             ☀️
 
         </div>
 
 
-        <div class="current-temperature">
+        <div
+            class="current-temperature">
 
 
-            <div class="temperature"
-                 id="temperature">
+            <div
+                class="temperature"
+                id="temperature">
 
                 --°
 
             </div>
 
 
-            <div class="minmax"
-                 id="minmax">
+            <div
+                class="minmax"
+                id="minmax">
 
                 --° / --°
 
@@ -371,17 +445,24 @@ body {
 
 
 
-    <!-- ================================================
+    <!-- =====================================================
          PREVISÃO
-    ================================================= -->
+    ====================================================== -->
 
-    <div class="forecast"
-         id="forecast">
+    <div
+        class="forecast"
+        id="forecast">
 
     </div>
 
 
-    <div id="error">
+
+    <!-- =====================================================
+         MENSAGEM DE ERRO
+    ====================================================== -->
+
+    <div
+        id="error">
 
         Sem conexão
 
@@ -395,129 +476,264 @@ body {
 <script>
 
 
-/* =====================================================
-   OPEN-METEO
-===================================================== */
+/* =========================================================
+   API OPEN-METEO
+========================================================= */
 
 const API =
 
-"https://api.open-meteo.com/v1/forecast" +
+    "https://api.open-meteo.com/v1/forecast"
 
-"?latitude=-23.485" +
+    +
 
-"&longitude=-51.792" +
+    "?latitude=-23.485"
 
-"&current=" +
+    +
 
-"temperature_2m," +
+    "&longitude=-51.792"
 
-"apparent_temperature," +
+    +
 
-"relative_humidity_2m," +
+    "&current="
 
-"weather_code," +
+    +
 
-"wind_speed_10m" +
+    "temperature_2m,"
 
-"&daily=" +
+    +
 
-"weather_code," +
+    "apparent_temperature,"
 
-"temperature_2m_max," +
+    +
 
-"temperature_2m_min," +
+    "relative_humidity_2m,"
 
-"precipitation_probability_max" +
+    +
 
-"&timezone=America%2FSao_Paulo" +
+    "weather_code,"
 
-"&forecast_days=5";
+    +
+
+    "wind_speed_10m"
+
+    +
+
+    "&daily="
+
+    +
+
+    "weather_code,"
+
+    +
+
+    "temperature_2m_max,"
+
+    +
+
+    "temperature_2m_min,"
+
+    +
+
+    "precipitation_probability_max"
+
+    +
+
+    "&timezone=America%2FSao_Paulo"
+
+    +
+
+    "&forecast_days=5";
 
 
 
-/* =====================================================
+/* =========================================================
    CONDIÇÕES METEOROLÓGICAS
-===================================================== */
+========================================================= */
 
 const weather = {
 
 
-    0: ["☀️", "CÉU LIMPO"],
-
-    1: ["🌤️", "LIMPO"],
-
-    2: ["⛅", "PARCIALMENTE NUBLADO"],
-
-    3: ["☁️", "NUBLADO"],
+    0: [
+        "☀️",
+        "CÉU LIMPO"
+    ],
 
 
-    45: ["🌫️", "NEBLINA"],
-
-    48: ["🌫️", "NEBLINA"],
-
-
-    51: ["🌦️", "GAROA"],
-
-    53: ["🌦️", "GAROA"],
-
-    55: ["🌧️", "GAROA"],
+    1: [
+        "🌤️",
+        "LIMPO"
+    ],
 
 
-    61: ["🌧️", "CHUVA"],
-
-    63: ["🌧️", "CHUVA"],
-
-    65: ["🌧️", "CHUVA"],
-
-
-    66: ["🌧️", "CHUVA"],
-
-    67: ["🌧️", "CHUVA"],
+    2: [
+        "⛅",
+        "PARCIALMENTE NUBLADO"
+    ],
 
 
-    71: ["❄️", "NEVE"],
-
-    73: ["❄️", "NEVE"],
-
-    75: ["❄️", "NEVE"],
-
-    77: ["❄️", "NEVE"],
+    3: [
+        "☁️",
+        "NUBLADO"
+    ],
 
 
-    80: ["🌦️", "PANCADAS"],
-
-    81: ["🌧️", "PANCADAS"],
-
-    82: ["⛈️", "PANCADAS"],
-
-
-    85: ["❄️", "NEVE"],
-
-    86: ["❄️", "NEVE"],
+    45: [
+        "🌫️",
+        "NEBLINA"
+    ],
 
 
-    95: ["⛈️", "TROVOADA"],
+    48: [
+        "🌫️",
+        "NEBLINA"
+    ],
 
-    96: ["⛈️", "TROVOADA"],
 
-    99: ["⛈️", "TROVOADA"]
+    51: [
+        "🌦️",
+        "GAROA"
+    ],
+
+
+    53: [
+        "🌦️",
+        "GAROA"
+    ],
+
+
+    55: [
+        "🌧️",
+        "GAROA"
+    ],
+
+
+    61: [
+        "🌧️",
+        "CHUVA"
+    ],
+
+
+    63: [
+        "🌧️",
+        "CHUVA"
+    ],
+
+
+    65: [
+        "🌧️",
+        "CHUVA"
+    ],
+
+
+    66: [
+        "🌧️",
+        "CHUVA"
+    ],
+
+
+    67: [
+        "🌧️",
+        "CHUVA"
+    ],
+
+
+    71: [
+        "❄️",
+        "NEVE"
+    ],
+
+
+    73: [
+        "❄️",
+        "NEVE"
+    ],
+
+
+    75: [
+        "❄️",
+        "NEVE"
+    ],
+
+
+    77: [
+        "❄️",
+        "NEVE"
+    ],
+
+
+    80: [
+        "🌦️",
+        "PANCADAS"
+    ],
+
+
+    81: [
+        "🌧️",
+        "PANCADAS"
+    ],
+
+
+    82: [
+        "⛈️",
+        "PANCADAS"
+    ],
+
+
+    85: [
+        "❄️",
+        "NEVE"
+    ],
+
+
+    86: [
+        "❄️",
+        "NEVE"
+    ],
+
+
+    95: [
+        "⛈️",
+        "TROVOADA"
+    ],
+
+
+    96: [
+        "⛈️",
+        "TROVOADA"
+    ],
+
+
+    99: [
+        "⛈️",
+        "TROVOADA"
+    ]
 
 };
 
 
 
+/* =========================================================
+   RETORNA INFORMAÇÕES DA CONDIÇÃO
+========================================================= */
+
 function weatherInfo(code) {
 
     return weather[code]
-        || ["🌤️", "VARIÁVEL"];
+
+        ||
+
+        [
+            "🌤️",
+            "VARIÁVEL"
+        ];
 
 }
 
 
 
-/* =====================================================
+/* =========================================================
    NOME DOS DIAS
-===================================================== */
+========================================================= */
 
 function getDayName(
     dateString,
@@ -540,32 +756,37 @@ function getDayName(
 
 
     return new Date(
-        dateString + "T12:00:00"
+        dateString +
+        "T12:00:00"
     )
 
-    .toLocaleDateString(
-        "pt-BR",
-        {
-            weekday: "short"
-        }
-    )
+        .toLocaleDateString(
+            "pt-BR",
+            {
+                weekday: "short"
+            }
+        )
 
-    .replace(".", "")
+        .replace(
+            ".",
+            ""
+        )
 
-    .toUpperCase();
+        .toUpperCase();
 
 }
 
 
 
-/* =====================================================
+/* =========================================================
    RELÓGIO
-===================================================== */
+========================================================= */
 
 function updateClock() {
 
 
-    const now = new Date();
+    const now =
+        new Date();
 
 
     const time =
@@ -579,7 +800,7 @@ function updateClock() {
         );
 
 
-    const day =
+    const date =
 
         now.toLocaleDateString(
             "pt-BR",
@@ -594,11 +815,15 @@ function updateClock() {
         "clock"
     ).innerHTML =
 
-        time +
+        time
 
-        "<br>" +
+        +
 
-        day;
+        "<br>"
+
+        +
+
+        date;
 
 }
 
@@ -613,9 +838,9 @@ setInterval(
 
 
 
-/* =====================================================
-   CACHE
-===================================================== */
+/* =========================================================
+   CACHE LOCAL
+========================================================= */
 
 function saveWeather(data) {
 
@@ -656,9 +881,9 @@ function loadWeather() {
 
 
 
-/* =====================================================
-   MOSTRAR DADOS
-===================================================== */
+/* =========================================================
+   RENDERIZA OS DADOS
+========================================================= */
 
 function render(data) {
 
@@ -677,16 +902,21 @@ function render(data) {
         );
 
 
-    /* ÍCONE ATUAL */
+    /* =====================================================
+       ÍCONE ATUAL
+    ===================================================== */
 
     document.getElementById(
         "currentIcon"
     ).textContent =
+
         currentInfo[0];
 
 
 
-    /* TEMPERATURA ATUAL */
+    /* =====================================================
+       TEMPERATURA ATUAL
+    ===================================================== */
 
     document.getElementById(
         "temperature"
@@ -694,11 +924,17 @@ function render(data) {
 
         Math.round(
             current.temperature_2m
-        ) + "°";
+        )
+
+        +
+
+        "°";
 
 
 
-    /* MÁXIMA / MÍNIMA */
+    /* =====================================================
+       MÁXIMA / MÍNIMA
+    ===================================================== */
 
     document.getElementById(
         "minmax"
@@ -706,21 +942,27 @@ function render(data) {
 
         Math.round(
             daily.temperature_2m_max[0]
-        ) +
+        )
 
-        "° / " +
+        +
+
+        "° / "
+
+        +
 
         Math.round(
             daily.temperature_2m_min[0]
-        ) +
+        )
+
+        +
 
         "°";
 
 
 
-    /* ================================================
+    /* =====================================================
        PREVISÃO
-    ================================================= */
+    ===================================================== */
 
     let html = "";
 
@@ -740,63 +982,67 @@ function render(data) {
 
 
         const max =
+
             Math.round(
                 daily.temperature_2m_max[i]
             );
 
 
         const min =
+
             Math.round(
                 daily.temperature_2m_min[i]
             );
 
 
         const rain =
+
             Math.round(
-                daily.precipitation_probability_max[i] || 0
+                daily
+                    .precipitation_probability_max[i]
+                ||
+                0
             );
 
 
 
-        html +=
+        html += `
 
-        `
-
-        <div class="day">
+            <div class="day">
 
 
-            <div class="day-name">
+                <div class="day-name">
 
-                ${getDayName(
-                    daily.time[i],
-                    i
-                )}
+                    ${getDayName(
+                        daily.time[i],
+                        i
+                    )}
+
+                </div>
+
+
+                <div class="day-icon">
+
+                    ${info[0]}
+
+                </div>
+
+
+                <div class="day-temperature">
+
+                    ${max}° / ${min}°
+
+                </div>
+
+
+                <div class="day-rain">
+
+                    ${rain}%
+
+                </div>
+
 
             </div>
-
-
-            <div class="day-icon">
-
-                ${info[0]}
-
-            </div>
-
-
-            <div class="day-temperature">
-
-                ${max}° / ${min}°
-
-            </div>
-
-
-            <div class="day-rain">
-
-                ${rain}%
-
-            </div>
-
-
-        </div>
 
         `;
 
@@ -812,9 +1058,9 @@ function render(data) {
 
 
 
-/* =====================================================
-   BUSCAR PREVISÃO
-===================================================== */
+/* =========================================================
+   ATUALIZA PREVISÃO
+========================================================= */
 
 async function updateWeather() {
 
@@ -828,8 +1074,10 @@ async function updateWeather() {
                 API +
                 "&_=" +
                 Date.now(),
+
                 {
-                    cache: "no-store"
+                    cache:
+                        "no-store"
                 }
             );
 
@@ -837,7 +1085,7 @@ async function updateWeather() {
         if (!response.ok) {
 
             throw new Error(
-                "API error"
+                "Erro HTTP"
             );
 
         }
@@ -865,7 +1113,7 @@ async function updateWeather() {
 
 
         console.log(
-            "Erro clima:",
+            "Erro ao atualizar:",
             error
         );
 
@@ -892,18 +1140,15 @@ async function updateWeather() {
 
 
 
-/* =====================================================
+/* =========================================================
    INICIALIZAÇÃO
-===================================================== */
+========================================================= */
 
 updateWeather();
 
 
 
-/*
-    Atualiza a previsão
-    a cada 10 minutos.
-*/
+/* Atualiza a previsão a cada 10 minutos */
 
 setInterval(
     updateWeather,
